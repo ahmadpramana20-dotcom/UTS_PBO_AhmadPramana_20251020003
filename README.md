@@ -64,3 +64,76 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# UTS PBO - Pelaporan Masalah Kampus (Laravel 13)
+
+Aplikasi CRUD sederhana untuk mengelola laporan masalah kampus. Melanjutkan tugas Minggu 7
+(halaman `/laporan`). Data disimpan di **session** (tanpa database) dengan pola
+**Route -> Controller -> Blade**.
+
+- Nama : Ahmad Pramana
+- NIM  : 20251020003
+- Mata kuliah : Pemrograman Berorientasi Objek (UTS Ganjil T.A. 2026/2027)
+
+## Langkah menjalankan
+
+```bash
+git clone <URL-REPOSITORY-INI>
+cd <nama-folder>
+
+composer install
+cp .env.example .env
+php artisan key:generate
+```
+
+Pastikan di file `.env` nilainya seperti ini (jangan memakai session database):
+
+```env
+SESSION_DRIVER=file
+APP_TIMEZONE=Asia/Jakarta
+```
+
+Pastikan folder session bisa ditulisi (Linux/Mac: `chmod -R 775 storage bootstrap/cache`),
+lalu jalankan:
+
+```bash
+php artisan config:clear
+php artisan serve
+```
+
+Buka `http://127.0.0.1:8000` (otomatis diarahkan ke `/laporan`).
+
+Lihat daftar route: `php artisan route:list --name=laporan`
+
+## Daftar route
+
+| No | Method    | URI                    | Nama route       | Aksi Controller |
+|----|-----------|------------------------|------------------|-----------------|
+| 1  | GET       | /laporan               | laporan.index    | index           |
+| 2  | GET       | /laporan/create        | laporan.create   | create          |
+| 3  | POST      | /laporan               | laporan.store    | store           |
+| 4  | GET       | /laporan/{kode}        | laporan.show     | show            |
+| 5  | GET       | /laporan/{kode}/edit   | laporan.edit     | edit            |
+| 6  | PUT/PATCH | /laporan/{kode}        | laporan.update   | update          |
+| 7  | DELETE    | /laporan/{kode}        | laporan.destroy  | destroy         |
+
+`{kode}` dibatasi format `LP-001` dst. Route statis `/laporan/create` ditulis sebelum `/laporan/{kode}`.
+
+## File utama
+
+| File | Fungsi |
+|------|--------|
+| `routes/web.php` | 7 named route menuju `LaporanController` |
+| `app/Http/Controllers/LaporanController.php` | Logika CRUD, validasi, penyimpanan di session |
+| `resources/views/layouts/app.blade.php` | Layout utama (judul, navigasi, konten, footer, pesan status) |
+| `resources/views/laporan/index.blade.php` | Daftar laporan + rekap + pencarian |
+| `resources/views/laporan/show.blade.php` | Detail satu laporan |
+| `resources/views/laporan/_form.blade.php` | Form bersama untuk tambah dan edit |
+| `resources/views/laporan/create.blade.php` | Halaman tambah |
+| `resources/views/laporan/edit.blade.php` | Halaman edit |
+
+## Catatan
+
+- Data awal LP-001 sampai LP-004 dimuat otomatis saat pertama kali membuka `/laporan`.
+- Data hilang bila session berakhir atau cookie browser dihapus (sesuai ketentuan: tanpa database).
+- File `.env` tidak disertakan di repository; gunakan `.env.example`.
+
